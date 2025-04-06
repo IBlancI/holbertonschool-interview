@@ -1,39 +1,28 @@
 #!/usr/bin/python3
+""" method """
+
 
 def canUnlockAll(boxes):
     """
-    Determines if all boxes can be opened.
-    
+    Checks if all the boxes can be opened.
+
     Args:
-        boxes: List of lists where each sublist contains keys
-              to open other boxes.
-    
+        boxes (list of lists): Each box contains keys.
+
     Returns:
-        True if all boxes can be opened, False otherwise.
+        bool: True if all the boxes can be opened, otherwise False.
     """
-    if not boxes:
-        return False
-    
+
     n = len(boxes)
-    opened = [False] * n
-    opened[0] = True  # First box is always unlocked
-    keys = set(boxes[0])  # Set of available keys
-    
-    while True:
-        new_keys = set()
-        # Iterate through all available keys
-        for key in keys:
-            if key < n and not opened[key]:
-                opened[key] = True
-                # Add newly found keys
-                new_keys.update(boxes[key])
-        
-        # If no new keys were found, stop
-        if not new_keys:
-            break
-        
-        # Update the set of available keys
-        keys.update(new_keys)
-    
-    # Check if all boxes have been opened
-    return all(opened) 
+    unlocked = set([0])
+    queue = [0]
+
+    while queue:
+        current_box = queue.pop(0)
+
+        for key in boxes[current_box]:
+            if key < n and key not in unlocked:
+                unlocked.add(key)
+                queue.append(key)
+
+    return len(unlocked) == n
